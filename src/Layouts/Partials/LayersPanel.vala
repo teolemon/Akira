@@ -31,7 +31,8 @@ public class Akira.Layouts.Partials.LayersPanel : Gtk.ListBox {
     private const int SCROLL_STEP_SIZE = 5;
     private const int SCROLL_DISTANCE = 30;
     private const int SCROLL_DELAY = 50;
-    public Akira.Layouts.Partials.Artboard artboard;
+    public Akira.Layouts.Partials.Artboard? artboard;
+    private int artboard_counter = 0;
 
     private const Gtk.TargetEntry targetEntries[] = {
         { "ARTBOARD", Gtk.TargetFlags.SAME_APP, 0 }
@@ -43,23 +44,27 @@ public class Akira.Layouts.Partials.LayersPanel : Gtk.ListBox {
             activate_on_single_click: false,
             selection_mode: Gtk.SelectionMode.SINGLE
         );
+        artboard = null;
     }
 
     construct {
         get_style_context ().add_class ("layers-panel");
         expand = true;
 
-        artboard = new Akira.Layouts.Partials.Artboard (window, "Artboard 1");
+        build_drag_and_drop ();
+
+        reload_zebra ();
+    }
+
+    public void insert_artboard () {
+        //Sets as current artboard
+        var artboard = new Akira.Layouts.Partials.Artboard (window, "Artboard %d".printf(++artboard_counter));
         var placeholder = new Gtk.ListBoxRow ();
         artboard.container.insert (placeholder, 0);
         placeholder.visible = false;
         placeholder.no_show_all = true;
 
-        insert (artboard, 0);
-
-        build_drag_and_drop ();
-
-        reload_zebra ();
+        insert (artboard, -1);
     }
 
     private void build_drag_and_drop () {

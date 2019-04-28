@@ -235,6 +235,9 @@ public class Akira.Lib.Canvas : Goo.Canvas {
     }
 
     public override bool motion_notify_event (Gdk.EventMotion event) {
+        if (selected_item.get_data<bool>("lock")) {
+            return false;
+        }
         if (!holding) {
             motion_hover_event (event);
             return false;
@@ -792,13 +795,11 @@ public class Akira.Lib.Canvas : Goo.Canvas {
     }
 
     public void delete_selected () {
-        debug ("here");
         if (selected_item != null) {
             selected_item.remove();
-            var artboard = window.main_window.right_sidebar.layers_panel.artboard;
             Akira.Layouts.Partials.Layer layer = selected_item.get_data<Akira.Layouts.Partials.Layer?> ("layer");
             if (layer != null) {
-                artboard.container.remove (layer);
+                window.main_window.right_sidebar.layers_panel.remove (layer);
             }
             remove_select_effect ();
             remove_hover_effect ();
@@ -815,11 +816,11 @@ public class Akira.Lib.Canvas : Goo.Canvas {
                                     "fill-color", "#ffa154", null);
         rect.set ("parent", root);
         rect.set_transform(Cairo.Matrix.identity ());
-        var artboard = window.main_window.right_sidebar.layers_panel.artboard;
-        var layer = new Akira.Layouts.Partials.Layer (window, artboard, rect, "Rectangle", "shape-rectangle-symbolic", false);
+        var layers_panel = window.main_window.right_sidebar.layers_panel;
+        var layer = new Akira.Layouts.Partials.Layer (window, null, rect, "Rectangle", "shape-rectangle-symbolic", false);
         rect.set_data<Akira.Layouts.Partials.Layer?> ("layer", layer);
-        artboard.container.add (layer);
-        artboard.show_all ();
+        layers_panel.add (layer);
+        layers_panel.show_all ();
         return rect;
     }
 
@@ -832,11 +833,11 @@ public class Akira.Lib.Canvas : Goo.Canvas {
 
         ellipse.set ("parent", root);
         ellipse.set_transform(Cairo.Matrix.identity ());
-        var artboard = window.main_window.right_sidebar.layers_panel.artboard;
-        var layer = new Akira.Layouts.Partials.Layer (window, artboard, ellipse, "Circle", "shape-circle-symbolic", false);
+        var layers_panel = window.main_window.right_sidebar.layers_panel;
+        var layer = new Akira.Layouts.Partials.Layer (window, null, ellipse, "Circle", "shape-circle-symbolic", false);
         ellipse.set_data<Akira.Layouts.Partials.Layer?> ("layer", layer);
-        artboard.container.add (layer);
-        artboard.show_all ();
+        layers_panel.add (layer);
+        layers_panel.show_all ();
         return ellipse;
     }
 
@@ -846,11 +847,11 @@ public class Akira.Lib.Canvas : Goo.Canvas {
         text.set ("parent", root);
         text.set ("height", 25f);
         text.set_transform(Cairo.Matrix.identity ());
-        var artboard = window.main_window.right_sidebar.layers_panel.artboard;
-        var layer = new Akira.Layouts.Partials.Layer (window, artboard, text, "Text", "shape-text-symbolic", false);
+        var layers_panel = window.main_window.right_sidebar.layers_panel;
+        var layer = new Akira.Layouts.Partials.Layer (window, null, text, "Text", "shape-text-symbolic", false);
         text.set_data<Akira.Layouts.Partials.Layer?> ("layer", layer);
-        artboard.container.add (layer);
-        artboard.show_all ();
+        layers_panel.add (layer);
+        layers_panel.show_all ();
         return text;
     }
 
