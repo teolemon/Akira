@@ -469,6 +469,9 @@ public class Akira.Lib.Canvas : Goo.Canvas {
 
         var item = (target as Goo.CanvasItemSimple);
 
+        window.main_window.left_sidebar.fill_box_panel.fills_list_model.clear ();
+        window.main_window.left_sidebar.fill_box_panel.fills_list_model.add(item);
+
         var line_width = 1.0 / current_scale;
         var stroke = item.line_width / 2;
         var real_x = x - stroke;
@@ -526,6 +529,7 @@ public class Akira.Lib.Canvas : Goo.Canvas {
         }
 
         select_effect.remove ();
+        window.main_window.left_sidebar.fill_box_panel.fills_list_model.clear ();
         select_effect = null;
         selected_item = null;
 
@@ -794,6 +798,7 @@ public class Akira.Lib.Canvas : Goo.Canvas {
     public void delete_selected () {
         if (selected_item != null) {
             selected_item.remove();
+            window.main_window.left_sidebar.fill_box_panel.fills_list_model.clear ();
             var artboard = window.main_window.right_sidebar.layers_panel.artboard;
             Akira.Layouts.Partials.Layer layer = selected_item.get_data<Akira.Layouts.Partials.Layer?> ("layer");
             if (layer != null) {
